@@ -1,4 +1,8 @@
 function Actor(){
+
+}
+
+Actor.fromChar = function(ch) {
     var actorTypes = {
         "@": Player,
         "o": Coin,
@@ -6,8 +10,6 @@ function Actor(){
         "|": VMovingLava,
         "v": DrippingLava
     };
-}
-
-Actor.prototype.fromChar = function(ch) {
+    
     return actorTypes[ch];
 }
