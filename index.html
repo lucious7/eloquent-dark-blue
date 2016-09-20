@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>
-    
+    <!-- Levels -->
     <script type="text/javascript" src="js/levels/SimpleLevel.js"></script>
     <script type="text/javascript" src="js/levels/game_levels.js"></script>
-    
+    <!-- Actors -->
     <script type="text/javascript" src="js/actors/Type.js"></script>
     <script type="text/javascript" src="js/actors/Coin.js"></script>
     <script type="text/javascript" src="js/actors/Lava.js"></script>
@@ -18,19 +18,16 @@
     <script type="text/javascript" src="js/actors/HMovingLava.js"></script>
     <script type="text/javascript" src="js/actors/VMovingLava.js"></script>
     <script type="text/javascript" src="js/actors/Player.js"></script>
+    <!-- Display -->
     <script type="text/javascript" src="js/display/DOMDisplay.js"></script>
+    <!-- Basic infrastructure -->
     <script type="text/javascript" src="js/basics/Util.js"></script>
     <script type="text/javascript" src="js/basics/Vector.js"></script>
     <script type="text/javascript" src="js/basics/Status.js"></script>
     <script type="text/javascript" src="js/basics/Level.js"></script>
     
     <script>
-        //function run(){
-            runGame(GAME_LEVELS, DOMDisplay);
-        //}
-        //setTimeout(run, 5000);
-        //var simpleLevel = new Level(plan);
-        //var display = new DOMDisplay(document.body, simpleLevel);
+        runGame(GAME_LEVELS, DOMDisplay);
     </script>
 </body>
 </html>
