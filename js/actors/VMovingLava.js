@@ -4,4 +4,4 @@ function VMovingLava(pos){
     this.speed = new Vector(0,2);
 }
 
-VMovingLava.prototype.type = "lava";
+VMovingLava.prototype = Object.create(Lava.prototype);

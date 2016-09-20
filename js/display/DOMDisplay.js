@@ -5,7 +5,7 @@ function elt(name, className) {
     return elt;
 }
 
-var scale = 60;
+var scale = 20;
 
 function scaleToPx(val) {
     return val * scale + "px";
@@ -29,7 +29,7 @@ DOMDisplay.prototype.drawBackground = function(){
         row.forEach(type => rowElt.appendChild(elt("td",type)));
     });
     return table;
-}
+};
 
 DOMDisplay.prototype.drawActors = function(){
     var wrap = elt("div");
@@ -41,7 +41,7 @@ DOMDisplay.prototype.drawActors = function(){
         rect.style.top = scaleToPx(actor.pos.y); 
     });
     return wrap;
-}
+};
 
 DOMDisplay.prototype.drawFrame = function() {
     if(this.actorLayer){
@@ -50,10 +50,10 @@ DOMDisplay.prototype.drawFrame = function() {
     this.actorLayer = this.wrap.appendChild(this.drawActors());
     this.wrap.className = "game " + (this.level.status || "");
     this.scrollPlayerIntoView();
-}
+};
 
 DOMDisplay.prototype.scrollPlayerIntoView = function() {
-    var width = this.wrap.clintWidth;
+    var width = this.wrap.clientWidth;
     var height = this.wrap.clientHeight;
     var margin = width/3;
     
@@ -73,7 +73,7 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
     }else if(center.y > bottom - margin){
         this.wrap.scrollTop = center.y + margin - height;
     }
-}
+};
 
 DOMDisplay.prototype.clear = function() {
   this.wrap.parentNode.removeChild(this.wrap);

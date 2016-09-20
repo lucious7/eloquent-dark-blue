@@ -4,4 +4,4 @@ function DrippingLava(pos){
     this.speed = new Vector(0,3);
 }
 
-DrippingLava.prototype.type = "lava";
+DrippingLava.prototype = Object.create(Lava.prototype);
