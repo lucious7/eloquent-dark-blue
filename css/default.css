@@ -23,6 +23,8 @@
 }
 .lost .player {
     background: rgb(160, 64, 64);
+    background: #FFC100;
+    box-shadow: -4px -5px 8px #FF5505, 4px -5px 8px #FF5505, -10px -10px 15px red, 10px -10px 15px red;
 }
 .won .player {
     box-shadow: -4px -7px 8px white, 4px -7px 8px white;
@@ -30,6 +32,6 @@
 .game {
     overflow: hidden;
     max-width: 1300px;
-    max-height: 900px;
+    max-height: 600px;
     position: relative;
 }

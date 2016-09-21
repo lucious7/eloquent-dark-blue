@@ -1,4 +1,4 @@
 var Status = {
-    LOST: "LOST",
-    WON: "WON"
+    LOST: "lost",
+    WON: "won"
 };

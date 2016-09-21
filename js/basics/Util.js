@@ -3,7 +3,7 @@ var arrowCodes = {37: "LEFT", 38: "UP", 39: "RIGHT"};
 function trackKeys(codes) {
     var pressed = Object.create(null);
     
-    function handler(event){                        console.log('::DEBUG::',event);
+    function handler(event){
         if(codes.hasOwnProperty(event.keyCode)){
             var down = event.type == "keydown";
             pressed[codes[event.keyCode]] = down;

@@ -55,7 +55,8 @@ DOMDisplay.prototype.drawFrame = function() {
 DOMDisplay.prototype.scrollPlayerIntoView = function() {
     var width = this.wrap.clientWidth;
     var height = this.wrap.clientHeight;
-    var margin = width/3;
+    var xMargin = width/3;
+    var yMargin = height/3;
     
     //the Viewport
     var left = this.wrap.scrollLeft, right = left + width;
@@ -64,14 +65,17 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
     var player = this.level.player;
     var center = player.pos.plus(player.size.times(0.5)).times(scale);
     
-    if(center.x < left + margin){
-        this.wrap.scrollLeft = center.x - margin;
-    }else if(center.x > right - margin){
-        this.wrap.scrollLeft = center.x + margin - width;
-    }else if(center.y < top + margin){
-        this.wrap.scrollTop = center.y - margin;
-    }else if(center.y > bottom - margin){
-        this.wrap.scrollTop = center.y + margin - height;
+    //center horizontally
+    if(center.x < left + xMargin){
+        this.wrap.scrollLeft = Math.max(center.x - xMargin, 0);
+    }else if(center.x > right - xMargin){
+        this.wrap.scrollLeft = Math.max(center.x + xMargin - width, 0);
+    }
+    //center vertically
+    if(center.y < top + yMargin){
+        this.wrap.scrollTop = Math.max(center.y - yMargin, 0);
+    }else if(center.y > bottom - yMargin){
+        this.wrap.scrollTop = Math.max(center.y + yMargin - height, 0);
     }
 };
 
