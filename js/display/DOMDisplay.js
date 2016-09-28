@@ -44,7 +44,7 @@ DOMDisplay.prototype.drawStatusBar = function(){
     var hearts = elt("span", "hearts");
     for(var i = 1; i <= 3; i++){
         var heart = elt("span", "heart");
-        if(this.level.player.hearts < i){
+        if(playerHearts < i){
             heart.className = "heart empty";
         }
         heart.innerHTML = "&nbsp;&nbsp;";

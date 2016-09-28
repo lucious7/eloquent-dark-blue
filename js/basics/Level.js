@@ -49,7 +49,7 @@ Level.prototype.animate = function(step, keys){
     while (step > 0) {
         var thisStep = Math.min(step, maxStep);
 
-        if(this.status == Status.LOST) keys = {};
+        if(this.status == Status.LOST || this.status === Status.GAME_OVER) keys = {};
         
         this.actors.forEach(actor => actor.act(thisStep, this, keys), this);
         step -= thisStep;
@@ -58,10 +58,14 @@ Level.prototype.animate = function(step, keys){
 
 Level.prototype.playerTouched = function(actorType, actor){
     if(actorType === Type.LAVA && this.status === null){
-        if(this.player.hearts < 1){
+        playerHearts--;
+        if(playerHearts < 1){
+            this.status = Status.GAME_OVER;
+            this.finishDelay = 2;
+        } else {
             this.status = Status.LOST;
             this.finishDelay = 1;
-        } else this.player.hearts--;
+        }
     } else if(actorType === Type.COIN){
         this.actors = this.actors.filter(other => other != actor);
         if(!this.actors.some(a => a.type === Type.COIN)){
@@ -99,6 +103,6 @@ Level.prototype.loadPlan = function(){
     this.status = this.finishDelay = null;
 }
 
-Level.prototype.restart = function(){
+Level.prototype.restart = function(){ console.log('RESETING...');
     this.loadPlan();
 };

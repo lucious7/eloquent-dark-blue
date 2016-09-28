@@ -44,21 +44,28 @@ function runLevel(level, Display, andThen) {
         level.animate(step, arrows);
         display.drawFrame(step);
         if(level.isFinished()){
-            display.clear();
             if(andThen){
                 andThen(level.status);
             }
-            return false;
+            console.log('STATUS', level.status);
+            if(level.status === Status.GAME_OVER || level.status === Status.WON){ 
+                display.clear();
+                return false;
+            }
         }
     });
 }
 
 function runGame(plans, Display){
+    playerHearts = 3; //must be global to keep track through the levels
     function startLevel(n){
-        runLevel(new Level(plans[n], n), Display, function(status){
+        var level = new Level(plans[n], n);
+        runLevel(level, Display, function(status){
             if(status === Status.LOST){
-                startLevel(n);
-            } else if(n < plans.length -1){
+                level.restart();
+            } else if(status === Status.GAME_OVER){
+                console.log("YOU LOST");
+            } else if(status === Status.WON && n < plans.length -1){
                 startLevel(n+1);
             } else console.log("YOU WON!!!!!!!");
         });
