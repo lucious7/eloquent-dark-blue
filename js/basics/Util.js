@@ -42,16 +42,13 @@ function runLevel(level, Display, andThen) {
 
     runAnimation(function(step){
         level.animate(step, arrows);
-        display.drawFrame(step);
+        display.drawFrame();
         if(level.isFinished()){
+            display.clear();
             if(andThen){
                 andThen(level.status);
             }
-            console.log('STATUS', level.status);
-            if(level.status === Status.GAME_OVER || level.status === Status.WON){ 
-                display.clear();
-                return false;
-            }
+            return false;
         }
     });
 }
@@ -62,7 +59,7 @@ function runGame(plans, Display){
         var level = new Level(plans[n], n);
         runLevel(level, Display, function(status){
             if(status === Status.LOST){
-                level.restart();
+                startLevel(n);
             } else if(status === Status.GAME_OVER){
                 console.log("YOU LOST");
             } else if(status === Status.WON && n < plans.length -1){

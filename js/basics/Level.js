@@ -49,7 +49,7 @@ Level.prototype.animate = function(step, keys){
     while (step > 0) {
         var thisStep = Math.min(step, maxStep);
 
-        if(this.status == Status.LOST || this.status === Status.GAME_OVER) keys = {};
+        if(this.status == Status.LOST) keys = {};
         
         this.actors.forEach(actor => actor.act(thisStep, this, keys), this);
         step -= thisStep;
@@ -102,7 +102,3 @@ Level.prototype.loadPlan = function(){
     this.player = this.actors.filter(a => a.type === Type.PLAYER)[0];
     this.status = this.finishDelay = null;
 }
-
-Level.prototype.restart = function(){ console.log('RESETING...');
-    this.loadPlan();
-};

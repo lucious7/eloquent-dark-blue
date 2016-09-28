@@ -68,15 +68,27 @@ DOMDisplay.prototype.drawStatusBar = function(){
 
 DOMDisplay.prototype.drawActors = function(){
     var wrap = elt("div");
-    wrap.appendChild(this.drawStatusBar());
-    this.level.actors.forEach(function(actor){
-        var rect = wrap.appendChild(elt("div", "actor "+actor.type));
-        rect.style.width = scaleToPx(actor.size.x);
-        rect.style.height = scaleToPx(actor.size.y);
-        rect.style.left = scaleToPx(actor.pos.x);
-        rect.style.top = scaleToPx(actor.pos.y); 
-    });
+    if(this.level.status === Status.GAME_OVER){
+        this.drawGameOver();
+        wrap.appendChild(this.drawActor(this.level.player));
+    } else {
+        wrap.appendChild(this.drawStatusBar());
+        var display = this;
+        this.level.actors.forEach(function(actor){
+            wrap.appendChild(display.drawActor(actor));
+        });
+    }
     return wrap;
+};
+
+DOMDisplay.prototype.drawActor = function(actor){
+    var rect = elt("div", "actor "+actor.type);
+    rect.style.width = scaleToPx(actor.size.x);
+    rect.style.height = scaleToPx(actor.size.y);
+    rect.style.left = scaleToPx(actor.pos.x);
+    rect.style.top = scaleToPx(actor.pos.y);
+
+    return rect;
 };
 
 DOMDisplay.prototype.drawFrame = function() {
@@ -87,6 +99,24 @@ DOMDisplay.prototype.drawFrame = function() {
     this.wrap.className = "game " + (this.level.status || "");
     this.scrollPlayerIntoView();
 };
+
+DOMDisplay.prototype.drawGameOver = function(){
+    if(this.gameOverCount === undefined){
+        this.gameOverCount = -1;
+        var text = this.wrap.appendChild(elt("h1","game-over-text"));
+        text.innerText = "GAME OVER";
+        text.style.left = this.wrap.scrollLeft + (this.wrap.clientWidth/2) - (text.clientWidth/2) + "px";
+        text.style.top = this.wrap.scrollTop + (this.wrap.clientHeight/2) - (text.clientHeight/2) + "px";
+    }
+    this.gameOverCount++;
+
+    var bg = this.wrap.querySelector(".background");
+    for(var i = 0; i < Math.min(this.gameOverCount,bg.childElementCount); i++){
+        for (var j = 0; j < bg.childNodes[i].childElementCount; j++) {
+            bg.childNodes[i].childNodes[j].style.backgroundColor = "black";
+        }
+    }
+}
 
 DOMDisplay.prototype.scrollPlayerIntoView = function() {
     var width = this.wrap.clientWidth;
@@ -119,5 +149,8 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
 };
 
 DOMDisplay.prototype.clear = function() {
-  this.wrap.parentNode.removeChild(this.wrap);
+    this.wrap.parentNode.removeChild(this.wrap);
+    if(this.level.status === Status.GAME_OVER){
+        document.querySelector(".game-over-layer").style.display = "flex";
+    }
 };

@@ -28,18 +28,37 @@ body {
     background: rgb(64, 64, 64);   
 }
 .lost .player {
-    background: rgb(160, 64, 64);
     background: #FFC100;
     box-shadow: -4px -5px 8px #FF5505, 4px -5px 8px #FF5505, -10px -10px 15px red, 10px -10px 15px red;
 }
 .won .player {
     box-shadow: -4px -7px 8px white, 4px -7px 8px white;
 }
+.game-over .player {
+    background-color: white;
+    box-shadow: -5px -8px 10px 0px #000000, 
+                5px -8px 10px 0px #000000,
+                -5px 8px 10px 0px #000000, 
+                5px 8px 10px 0px #000000;
+}
 .game {
     overflow: hidden;
     max-width: 1300px;
     max-height: 600px;
     position: relative;
+    color: white;
+}
+
+.game-over-text {
+    color: white;
+    position: absolute;
+}
+
+.game-over-layer {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .status {
@@ -48,6 +67,7 @@ body {
     background: rgba(255, 255, 255, 0.5);
     position: absolute;
     box-sizing: border-box;
+    display: flex;
     padding: 10px;
     top: 0;
 }
@@ -56,7 +76,6 @@ body {
     width: 33%;
     height: 100%;
     position: relative;
-    float: left;
 }
 
 .heart {
@@ -75,11 +94,9 @@ body {
 .time {
     width: 33%;
     height: 100%;
-    float: left;
 }
 
 .lvl {
     width: 33%;
     height: 100%;
-    float: right;
 }
