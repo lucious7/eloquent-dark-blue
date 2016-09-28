@@ -11,6 +11,13 @@ function scaleToPx(val) {
     return val * scale + "px";
 }
 
+function convertToTime(timeInMilis){
+    var seconds = (Math.round(timeInMilis/1000)%60);
+    var minutes = Math.floor(timeInMilis/60000);
+
+    return (minutes < 10 ? '0'+minutes : minutes) + ':' + (seconds < 10 ? '0'+seconds : seconds );
+}
+
 function DOMDisplay(parent, level) {
     this.wrap = parent.appendChild(elt("div", "game"));
     this.level = level;
@@ -31,8 +38,37 @@ DOMDisplay.prototype.drawBackground = function(){
     return table;
 };
 
+DOMDisplay.prototype.drawStatusBar = function(){
+    this.statusBar = elt("div", "status");
+    
+    var hearts = elt("span", "hearts");
+    for(var i = 1; i <= 3; i++){
+        var heart = elt("span", "heart");
+        if(this.level.player.hearts < i){
+            heart.className = "heart empty";
+        }
+        heart.innerHTML = "&nbsp;&nbsp;";
+        hearts.appendChild(heart);
+    }
+    this.statusBar.appendChild(hearts);
+
+    var timer = elt("span", "time");
+    timer.innerText = convertToTime(Date.now() - this.level.startTime);
+    timer.style.textAlign = "center";
+    this.statusBar.appendChild(timer);
+
+
+    var lvl = elt("span", "lvl");
+    lvl.innerText = 'Level: '+this.level.number;
+    lvl.style.textAlign = "center";
+    this.statusBar.appendChild(lvl);
+
+    return this.statusBar;
+};
+
 DOMDisplay.prototype.drawActors = function(){
     var wrap = elt("div");
+    wrap.appendChild(this.drawStatusBar());
     this.level.actors.forEach(function(actor){
         var rect = wrap.appendChild(elt("div", "actor "+actor.type));
         rect.style.width = scaleToPx(actor.size.x);
@@ -77,6 +113,9 @@ DOMDisplay.prototype.scrollPlayerIntoView = function() {
     }else if(center.y > bottom - yMargin){
         this.wrap.scrollTop = Math.max(center.y + yMargin - height, 0);
     }
+
+    this.statusBar.style.left = this.wrap.scrollLeft + "px";
+    this.statusBar.style.top = this.wrap.scrollTop + "px";
 };
 
 DOMDisplay.prototype.clear = function() {

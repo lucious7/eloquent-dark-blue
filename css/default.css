@@ -1,3 +1,9 @@
+body {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
 .background {
     background: rgb(52, 166, 251);
     table-layout: fixed;
@@ -34,4 +40,46 @@
     max-width: 1300px;
     max-height: 600px;
     position: relative;
+}
+
+.status {
+    height: 40px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    box-sizing: border-box;
+    padding: 10px;
+    top: 0;
+}
+
+.hearts {
+    width: 33%;
+    height: 100%;
+    position: relative;
+    float: left;
+}
+
+.heart {
+    width: 30px;
+    height: 10px;
+    margin: 10px;
+    background-color: red;
+    border: solid 2px white;
+    z-index: 4;
+}
+
+.empty {
+    background-color: none;
+}
+
+.time {
+    width: 33%;
+    height: 100%;
+    float: left;
+}
+
+.lvl {
+    width: 33%;
+    height: 100%;
+    float: right;
 }

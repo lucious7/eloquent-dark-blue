@@ -1,28 +1,8 @@
-function Level(plan) {
-    this.width = plan[0].length;
-    this.height = plan.length;
-    this.grid = [];
-    this.actors = [];
+function Level(plan, number) {
+    this.number = number;
+    this.plan = plan;
     
-    for (var y = 0; y < this.height; y++) {
-        var line = plan[y], gridLine = [];
-        for (var x = 0; x < this.width; x++) {
-            var ch = line[x], fieldType = null;
-            var actorType = Type.fromChar(ch);
-            if(actorType){
-                this.actors.push(new actorType(new Vector(x,y)));
-            }else if(ch === '#'){
-                fieldType = Type.WALL;
-            }else if(ch === '!'){
-                fieldType = Type.LAVA;
-            }
-            gridLine.push(fieldType);
-        }
-        this.grid.push(gridLine);
-    }
-    
-    this.player = this.actors.filter(a => a.type === Type.PLAYER)[0];
-    this.status = this.finishDelay = null;
+    this.loadPlan(plan);
 }
 
 var maxStep = 0.05;
@@ -78,8 +58,10 @@ Level.prototype.animate = function(step, keys){
 
 Level.prototype.playerTouched = function(actorType, actor){
     if(actorType === Type.LAVA && this.status === null){
-        this.status = Status.LOST;
-        this.finishDelay = 1;
+        if(this.player.hearts < 1){
+            this.status = Status.LOST;
+            this.finishDelay = 1;
+        } else this.player.hearts--;
     } else if(actorType === Type.COIN){
         this.actors = this.actors.filter(other => other != actor);
         if(!this.actors.some(a => a.type === Type.COIN)){
@@ -87,4 +69,36 @@ Level.prototype.playerTouched = function(actorType, actor){
             this.finishDelay = 1;
         }
     }
+};
+
+Level.prototype.loadPlan = function(){
+        this.width = this.plan[0].length;
+        this.height = this.plan.length;
+        this.grid = [];
+        this.actors = [];
+        this.startTime = Date.now();
+
+        for (var y = 0; y < this.height; y++) {
+        var line = this.plan[y], gridLine = [];
+        for (var x = 0; x < this.width; x++) {
+            var ch = line[x], fieldType = null;
+            var actorType = Type.fromChar(ch);
+            if(actorType){
+                this.actors.push(new actorType(new Vector(x,y)));
+            }else if(ch === '#'){
+                fieldType = Type.WALL;
+            }else if(ch === '!'){
+                fieldType = Type.LAVA;
+            }
+            gridLine.push(fieldType);
+        }
+        this.grid.push(gridLine);
+    }
+    
+    this.player = this.actors.filter(a => a.type === Type.PLAYER)[0];
+    this.status = this.finishDelay = null;
+}
+
+Level.prototype.restart = function(){
+    this.loadPlan();
 };

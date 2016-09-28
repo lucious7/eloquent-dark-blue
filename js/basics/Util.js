@@ -55,7 +55,7 @@ function runLevel(level, Display, andThen) {
 
 function runGame(plans, Display){
     function startLevel(n){
-        runLevel(new Level(plans[n]), Display, function(status){
+        runLevel(new Level(plans[n], n), Display, function(status){
             if(status === Status.LOST){
                 startLevel(n);
             } else if(n < plans.length -1){
