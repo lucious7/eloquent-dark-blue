@@ -42,7 +42,7 @@ function runLevel(level, Display, andThen) {
 
     runAnimation(function(step){
         level.animate(step, arrows);
-        display.drawFrame();
+        display.drawFrame(step);
         if(level.isFinished()){
             display.clear();
             if(andThen){
