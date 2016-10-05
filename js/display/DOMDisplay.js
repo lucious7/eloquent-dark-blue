@@ -73,10 +73,9 @@ DOMDisplay.prototype.drawActors = function(){
         wrap.appendChild(this.drawActor(this.level.player));
     } else {
         wrap.appendChild(this.drawStatusBar());
-        var display = this;
         this.level.actors.forEach(function(actor){
-            wrap.appendChild(display.drawActor(actor));
-        });
+            wrap.appendChild(this.drawActor(actor));
+        }, this);
     }
     return wrap;
 };

@@ -111,20 +111,26 @@ CanvasDisplay.prototype.drawStatusBar = function(){
 };
 
 CanvasDisplay.prototype.drawActors = function(){
-    this.level.actors.forEach(function(actor){
-        var width = actor.size.x * scale;
-        var height = actor.size.y * scale;
-        var x = (actor.pos.x - this.viewport.left) * scale;
-        var y = (actor.pos.y - this.viewport.top) * scale;
 
-        if(actor.type === Type.PLAYER){
-            this.drawPlayer(x, y, width, height);
-        } else {
-            var tileX = (actor.type === Type.COIN ? 2 : 1) * scale;
-            this.cx.drawImage(otherSprites, tileX, 0, width, height,
-                                                x, y, width, height);
-        }
+    this.level.actors.forEach(function(actor){
+        this.drawActor(actor);
     }, this);
+
+};
+
+CanvasDisplay.prototype.drawActor = function(actor){
+    var width = actor.size.x * scale;
+    var height = actor.size.y * scale;
+    var x = (actor.pos.x - this.viewport.left) * scale;
+    var y = (actor.pos.y - this.viewport.top) * scale;
+
+    if(actor.type === Type.PLAYER){
+        this.drawPlayer(x, y, width, height);
+    } else {
+        var tileX = (actor.type === Type.COIN ? 2 : 1) * scale;
+        this.cx.drawImage(otherSprites, tileX, 0, width, height,
+                                            x, y, width, height);
+    }
 };
 
 CanvasDisplay.prototype.drawFrame = function(step) {
@@ -133,8 +139,13 @@ CanvasDisplay.prototype.drawFrame = function(step) {
     this.updateViewport();
     this.clearDisplay();
     this.drawBackground();
-    this.drawActors();
-    this.drawStatusBar();
+    if(this.level.status === Status.GAME_OVER){
+        this.drawGameOver();
+        this.drawActor(this.level.player);
+    } else {
+        this.drawActors();
+        this.drawStatusBar();
+    }
 };
 
 CanvasDisplay.prototype.updateViewport = function(){
@@ -170,19 +181,16 @@ CanvasDisplay.prototype.clearDisplay = function(){
 CanvasDisplay.prototype.drawGameOver = function(){
     if(this.gameOverCount === undefined){
         this.gameOverCount = -1;
-        var text = this.wrap.appendChild(elt("h1","game-over-text"));
-        text.innerText = "GAME OVER";
-        text.style.left = this.wrap.scrollLeft + (this.wrap.clientWidth/2) - (text.clientWidth/2) + "px";
-        text.style.top = this.wrap.scrollTop + (this.wrap.clientHeight/2) - (text.clientHeight/2) + "px";
     }
     this.gameOverCount++;
 
-    var bg = this.wrap.querySelector(".background");
-    for(var i = 0; i < Math.min(this.gameOverCount,bg.childElementCount); i++){
-        for (var j = 0; j < bg.childNodes[i].childElementCount; j++) {
-            bg.childNodes[i].childNodes[j].style.backgroundColor = "black";
-        }
+    for(var i = 0; i < Math.min(this.gameOverCount,this.canvas.height); i++){
+        this.cx.fillStyle = "rgb(0,0,0)";
+        this.cx.fillRect(0, 0, this.canvas.width, i * scale);
     }
+
+    this.cx.fillStyle = "rgb(255,255,255)";
+    this.cx.fillText("GAME OVER", (this.canvas.width/2)-50, this.canvas.height/2);
 }
 
 

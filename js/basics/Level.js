@@ -49,7 +49,7 @@ Level.prototype.animate = function(step, keys){
     while (step > 0) {
         var thisStep = Math.min(step, maxStep);
 
-        if(this.status == Status.LOST) keys = {};
+        if(this.status == Status.LOST || this.status === Status.GAME_OVER) keys = {};
         
         this.actors.forEach(actor => actor.act(thisStep, this, keys), this);
         step -= thisStep;
