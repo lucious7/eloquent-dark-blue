@@ -86,32 +86,28 @@ CanvasDisplay.prototype.drawPlayer = function(x, y, width, height){
         this.cx.restore();
 };
 
+var heartsSprites = document.createElement("img");
+heartsSprites.src = "img/hearts.png";
+
 CanvasDisplay.prototype.drawStatusBar = function(){
-    this.statusBar = elt("div", "status");
+    this.cx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    this.cx.fillRect(0,0, this.canvas.width, scale * 2);
+    var heartX = 0;
     
-    var hearts = elt("span", "hearts");
-    for(var i = 1; i <= 3; i++){
-        var heart = elt("span", "heart");
-        if(playerHearts < i){
-            heart.className = "heart empty";
+    for(var i = 0; i < 3; i++){
+        if(playerHearts < i+1){
+            heartX = 25;
         }
-        heart.innerHTML = "&nbsp;&nbsp;";
-        hearts.appendChild(heart);
+        this.cx.drawImage(heartsSprites, heartX, 0, 25, 22,
+                                        (i * 35) + 10, 10, 25, 22);
     }
-    this.statusBar.appendChild(hearts);
 
-    var timer = elt("span", "time");
-    timer.innerText = convertToTime(Date.now() - this.level.startTime);
-    timer.style.textAlign = "center";
-    this.statusBar.appendChild(timer);
+    this.cx.fillStyle = "rgb(0,0,0)";
+    this.cx.font = "bold 20px monospace";
 
+    this.cx.fillText(convertToTime(Date.now() - this.level.startTime), (this.canvas.width/2)-50, 25);
+    this.cx.fillText("Level:"+this.level.number, this.canvas.width - 110, 25);
 
-    var lvl = elt("span", "lvl");
-    lvl.innerText = 'Level: '+this.level.number;
-    lvl.style.textAlign = "center";
-    this.statusBar.appendChild(lvl);
-
-    return this.statusBar;
 };
 
 CanvasDisplay.prototype.drawActors = function(){
@@ -131,16 +127,6 @@ CanvasDisplay.prototype.drawActors = function(){
     }, this);
 };
 
-CanvasDisplay.prototype.drawActor = function(actor){
-    var rect = elt("div", "actor "+actor.type);
-    rect.style.width = scaleToPx(actor.size.x);
-    rect.style.height = scaleToPx(actor.size.y);
-    rect.style.left = scaleToPx(actor.pos.x);
-    rect.style.top = scaleToPx(actor.pos.y);
-
-    return rect;
-};
-
 CanvasDisplay.prototype.drawFrame = function(step) {
     this.animationTime += step;
 
@@ -148,6 +134,7 @@ CanvasDisplay.prototype.drawFrame = function(step) {
     this.clearDisplay();
     this.drawBackground();
     this.drawActors();
+    this.drawStatusBar();
 };
 
 CanvasDisplay.prototype.updateViewport = function(){
